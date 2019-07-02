@@ -1,0 +1,34 @@
+OUTPUT_DIR := 
+
+TRAIN_TXT := $(OUTPUT_DIR)/train.tsv
+TEST_TXT := $(OUTPUT_DIR)/test.tsv
+
+DATA_DIR := data/localgovfaq
+QAS_DIR := $(DATA_DIR)/qas
+TARGET_ANSWERS_FILE := $(DATA_DIR)/qas/answers_in_Amagasaki.txt
+TEST_SET_FILE := $(DATA_DIR)/testset_segmentation.txt
+
+Q_FILES=$(wildcard $(QAS_DIR)/questions_*.txt)
+A_FILES=$(subst $(QAS_DIR)/questions,$(QAS_DIR)/answers,$(Q_FILES))
+
+PYTHON_COMMAND := python
+
+PID := $(shell echo $$$$)
+
+GENERATE_INPUT_ARGS :=
+
+N_NEGATIVE_SAMPLES := 24
+GENERATE_INPUT_ARGS += --n_negative_samples $(N_NEGATIVE_SAMPLES)
+
+all: train_txt test_txt
+train_txt: $(TRAIN_TXT)
+test_txt: $(TEST_TXT)
+
+$(TRAIN_TXT):
+	mkdir -p $(OUTPUT_DIR) && cut -f 2 $(Q_FILES) >> questions_all_tmp.txt.$(PID) && \
+	cut -f 2 $(A_FILES) >> answers_all_tmp.txt.$(PID) && \
+	paste questions_all_tmp.txt.$(PID) answers_all_tmp.txt.$(PID) | $(PYTHON_COMMAND) scripts/generate_input.py $(GENERATE_INPUT_ARGS) > $@ && \
+	rm -f questions_all_tmp.txt.$(PID) answers_all_tmp.txt.$(PID)
+
+$(TEST_TXT):
+	mkdir -p $(OUTPUT_DIR) && $(PYTHON_COMMAND) scripts/generate_test_file.py --test_set_file $(TEST_SET_FILE) --answer_file $(TARGET_ANSWERS_FILE) --new_format > $@
