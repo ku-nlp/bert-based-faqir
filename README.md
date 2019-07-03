@@ -11,7 +11,7 @@ Download the BERT repository, BERT Japanese pre-trained model, QA pairs in Amaga
 ```shell
 ./download.sh
 ```
-The data stracture is below.
+The data structure is below.
 ```shell
 data
 ├── bert : BERT original repository
@@ -66,7 +66,7 @@ def main(_):
   }
 ```
 
-For Japanese, we need to comment out "text = self._tokenize_chinese_chars(text)" in tokenization.py in BERT repository.
+**For Japanese, we need to comment out `text = self._tokenize_chinese_chars(text)` in tokenization.py in BERT repository.**
 
 Finetune and evaluate.
 ```shell
