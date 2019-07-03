@@ -22,6 +22,7 @@ data
     └── samples : the retrieval results by TSUBAKI, BERT, and Joint model
 
 ```
+The detail about localgovFAQ is on [localgovFAQ.md](localgovFAQ.md).
 
 ### BERT application for FAQ retrieval
 And we should add the task class to run_classifier.py in the original BERT repository as below.
