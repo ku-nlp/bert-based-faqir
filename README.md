@@ -7,11 +7,22 @@ The detail is on our paper([`arxiv`](https://arxiv.org/abs/1905.02851)).
 tensorflow >= 1.11.0
 ```
 ## Usage
-Download the BERT repository, pre-trained Japanese BERT model, QA pairs in Amagasaki City FAQ, testset(localgovFAQ) and samples of prediction results.
+Download the BERT repository, BERT Japanese pre-trained model, QA pairs in Amagasaki City FAQ, testset(localgovFAQ) and samples of prediction results.
 ```shell
 ./download.sh
 ```
-And we should add the task class to run_classifier.py in the original BERT repository as below code.
+The data stracture is below.
+```shell
+data
+├── bert : BERT original repository
+├── Japanese_L-12_H-768_A-12_E-30_BPE : BERT Japanese pre-trained model
+└── localgovfaq
+    ├── qas : QA pairs in Amagasaki City FAQ
+    ├── testset_segmentation.txt : testset for evaluation
+    └── samples : retrieval results by TSUBAKI, BERT, and Joint model
+
+```
+And we should add the task class to run_classifier.py in the original BERT repository as below.
 ```python
 class CQAProcessor(DataProcessor):
   """Processor for the CoLA data set (GLUE version)."""
@@ -73,7 +84,7 @@ MAP : 0.550, MRR : 0.596, MDCG : 0.524
 
 ### TSUBAKI + BERT
 
-TSUBAKI is retrieval models based on BM25.
+TSUBAKI is retrieval models based on BM25 ([`paper`]( http://nlp.ist.i.kyoto-u.ac.jp/local/pubdb/skeiji/IJCNLP2008/ijcnlp08.pdf ), [`github`]( https://github.com/ku-nlp/TSUBAKI ) ).
 We can get the higher score by using both TSUBAKI and BERT.
 
 We can evaluate the joint model by the below command.
