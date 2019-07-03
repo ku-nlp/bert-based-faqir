@@ -87,7 +87,7 @@ MAP : 0.550, MRR : 0.596, MDCG : 0.524
 
 ### TSUBAKI + BERT
 
-TSUBAKI ([`paper`]( http://nlp.ist.i.kyoto-u.ac.jp/local/pubdb/skeiji/IJCNLP2008/ijcnlp08.pdf ) is the open search engine based on BM25, [`github`]( https://github.com/ku-nlp/TSUBAKI ) ).
+TSUBAKI ([`paper`]( http://nlp.ist.i.kyoto-u.ac.jp/local/pubdb/skeiji/IJCNLP2008/ijcnlp08.pdf ), [`github`]( https://github.com/ku-nlp/TSUBAKI ) ) is the open search engine based on BM25.
 We can get the higher score by using both TSUBAKI and BERT.
 
 We can evaluate the joint model by the below command.
