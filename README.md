@@ -1,13 +1,13 @@
 # bert-based-faqir
 FAQ retrieval system that considers the similarity between a user’s query and a question as well as the relevance between the query and an answer.
-The detail is on our paper([`arxiv`](https://arxiv.org/abs/1905.02851)).
-
+The detail is on our paper ([`arxiv`](https://arxiv.org/abs/1905.02851)).
+ 
 ## Requirements
 ```
 tensorflow >= 1.11.0
 ```
 ## Usage
-Download the BERT repository, BERT Japanese pre-trained model, QA pairs in Amagasaki City FAQ, testset(localgovFAQ) and samples of prediction results.
+Download the BERT repository, BERT Japanese pre-trained model, QA pairs in Amagasaki City FAQ, testset (localgovFAQ) and samples of prediction results.
 ```shell
 ./download.sh
 ```
@@ -87,7 +87,7 @@ MAP : 0.550, MRR : 0.596, MDCG : 0.524
 
 ### TSUBAKI + BERT
 
-TSUBAKI is the open search engine based on BM25 ([`paper`]( http://nlp.ist.i.kyoto-u.ac.jp/local/pubdb/skeiji/IJCNLP2008/ijcnlp08.pdf ), [`github`]( https://github.com/ku-nlp/TSUBAKI ) ).
+TSUBAKI ([`paper`]( http://nlp.ist.i.kyoto-u.ac.jp/local/pubdb/skeiji/IJCNLP2008/ijcnlp08.pdf ) is the open search engine based on BM25, [`github`]( https://github.com/ku-nlp/TSUBAKI ) ).
 We can get the higher score by using both TSUBAKI and BERT.
 
 We can evaluate the joint model by the below command.
@@ -112,6 +112,6 @@ MAP : 0.660, MRR : 0.720, MDCG : 0.625
 ```
 
 ## Reference
-Wataru Sakata(LINE Corporation), Tomohide Shibata(Kyoto University), Ribeka Tanaka(Kyoto University) and Sadao Kurohashi(Kyoto University):
+Wataru Sakata (LINE Corporation), Tomohide Shibata (Kyoto University), Ribeka Tanaka (Kyoto University) and Sadao Kurohashi (Kyoto University):
 FAQ Retrieval using Query-Question Similarity and BERT-Based Query-Answer Relevance,
 Proceedings of SIGIR2019: 42nd Intl ACM SIGIR Conference on Research and Development in Information Retrieval,  (2019.7).[`arxiv`](https://arxiv.org/abs/1905.02851)
