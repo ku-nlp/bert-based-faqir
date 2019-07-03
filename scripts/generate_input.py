@@ -28,7 +28,6 @@ def main(args):
         for negative_answer in negative_samples:
             print("0\t{}\t{}".format(instance["question"], negative_answer))
 
-# paste /windroot/sakata/line_chatbot/split_qa/qas181031/questions_all.txt /windroot/sakata/line_chatbot/split_qa/qas181031/answers_all.txt | python generate_input.py
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--n_negative_samples', dest='n_negative_samples', type=int, action='store', default=24)

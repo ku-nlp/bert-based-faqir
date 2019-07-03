@@ -51,7 +51,6 @@ def main(args):
                 category, question, gold_answer_id_string = line.strip().split("\t", 2)
                 gold_answer_ids = gold_answer_id_string.split("\t")
 
-                # 正解が複数ある場合をスキップ
                 if args.all is False and category == "1" and len(gold_answer_ids) > 1:
                     continue
 
