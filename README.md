@@ -12,14 +12,14 @@ Download the BERT repository, BERT Japanese pre-trained model, QA pairs in Amaga
 ./download.sh
 ```
 The data structure is below.
-```shell
+```
 data
 ├── bert : BERT original repository
 ├── Japanese_L-12_H-768_A-12_E-30_BPE : BERT Japanese pre-trained model
 └── localgovfaq
     ├── qas : QA pairs in Amagasaki City FAQ
-    ├── testset_segmentation.txt : testset for evaluation
-    └── samples : retrieval results by TSUBAKI, BERT, and Joint model
+    ├── testset_segmentation.txt : the testset for evaluation
+    └── samples : the retrieval results by TSUBAKI, BERT, and Joint model
 
 ```
 And we should add the task class to run_classifier.py in the original BERT repository as below.
