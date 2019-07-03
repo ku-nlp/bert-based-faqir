@@ -22,6 +22,8 @@ data
     └── samples : the retrieval results by TSUBAKI, BERT, and Joint model
 
 ```
+
+### BERT application for FAQ retrieval
 And we should add the task class to run_classifier.py in the original BERT repository as below.
 ```python
 class CQAProcessor(DataProcessor):
