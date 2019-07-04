@@ -24,7 +24,7 @@ data
     └── samples : the retrieval results by TSUBAKI, BERT, and Joint model
 
 ```
-\*1 We modified the original code of BERT so that it can tokenize Japanese sentences and read localgovFAQ or other FAQ datasets. See [ku-nlp/bert](https://github.com/ku-nlp/bert).
+\*1 We modified the original code of BERT so that it can tokenize Japanese sentences and read localgovFAQ or other FAQ datasets. See [ku-nlp/bert](https://github.com/ku-nlp/bert/tree/FAQretrieval).
 \*2 The detail about localgovFAQ is on [localgovFAQ.md](localgovFAQ.md).
 
 ### BERT application for FAQ retrieval
