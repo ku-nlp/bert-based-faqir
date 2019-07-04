@@ -31,8 +31,7 @@ The detail about localgovFAQ is on [localgovFAQ.md](localgovFAQ.md).
 Finetune and evaluate.
 ```shell
 make -f Makefile.generate_dataset OUTPUT_DIR=/path/to/data_dir
-make -f Makefile.run_classifier \ 
-    BERT_DATA_DIR=/path/to/data_dir \
+make -f Makefile.run_classifier BERT_DATA_DIR=/path/to/data_dir \
     OUTPUT_DIR=/path/to/somewhere \
     JAPANESE=true
 ```
