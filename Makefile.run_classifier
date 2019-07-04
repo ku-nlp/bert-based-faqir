@@ -23,6 +23,13 @@ TEST_W_EVAL := $(OUTPUT_DIR)/test_w_eval.txt
 
 TEST_SET_FILE := data/localgovfaq/testset_segmentation.txt
 
+JAPANESE := false
+BERT_ARGS := --task_name=CQA --do_train=true --do_predict=true --data_dir=$(BERT_DATA_DIR) --vocab_file=$(VOCAB_FILE) --bert_config_file=$(BERT_CONFIG_FILE) --init_checkpoint=$(BERT_MODEL_DIR)/bert_model.ckpt --max_seq_length=128 --train_batch_size=32 --learning_rate=2e-5 --num_train_epochs=3.0 --output_dir=$(OUTPUT_DIR)
+
+ifeq ($(JAPANESE),true)
+	BERT_ARGS += --japanese=true --do_lower_case=false
+endif
+
 all: $(TEST_W_EVAL)
 
 # fine tuneing
@@ -30,7 +37,7 @@ $(TEST_RESULT):
 	mkdir -p $(OUTPUT_DIR) && \
 	ln -s $(BERT_CONFIG_FILE) $(OUTPUT_DIR)/bert_config.json && \
 	ln -s $(VOCAB_FILE) $(OUTPUT_DIR)/vocab.txt &&\
-	$(PYTHON_GPU) $(BERT_DIR)/run_classifier.py --task_name=CQA --do_lower_case=false --do_train=true --do_predict=true --data_dir=$(BERT_DATA_DIR) --vocab_file=$(VOCAB_FILE) --bert_config_file=$(BERT_CONFIG_FILE) --init_checkpoint=$(BERT_MODEL_DIR)/bert_model.ckpt --max_seq_length=128 --train_batch_size=32 --learning_rate=2e-5 --num_train_epochs=3.0 --output_dir=$(OUTPUT_DIR) 2>&1 | tee $(OUTPUT_DIR)/log.txt
+	$(PYTHON_GPU) $(BERT_DIR)/run_classifier.py $(BERT_ARGS) 2>&1 | tee $(OUTPUT_DIR)/log.txt
 
 $(TEST_ARRANGED): $(TEST_RESULT)
 	paste $(TEST_RESULT) $(TEST_TSV) | $(PYTHON_CPU) scripts/generate_evaluation_file.py --question_file $(TARGET_QUESTIONS_FILE) > $@
