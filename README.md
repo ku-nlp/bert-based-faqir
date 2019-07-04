@@ -16,15 +16,16 @@ Download the BERT repository, BERT Japanese pre-trained model, QA pairs in Amaga
 The data structure is below.
 ```
 data
-├── bert : The forked repository from BERT original repository
-├── Japanese_L-12_H-768_A-12_E-30_BPE : BERT Japanese pre-trained model
-└── localgovfaq
+├── bert : The forked repository from BERT original repository *1
+├── Japanese_L-12_H-768_A-12_E-30_BPE : BERT Japanese pre-trained model 
+└── localgovfaq *2
     ├── qas : QA pairs in Amagasaki City FAQ
     ├── testset_segmentation.txt : the testset for evaluation
     └── samples : the retrieval results by TSUBAKI, BERT, and Joint model
 
 ```
-The detail about localgovFAQ is on [localgovFAQ.md](localgovFAQ.md).
+\*1 We modified the original code of BERT so that it can tokenize Japanese sentences and read localgovFAQ or other FAQ datasets. See [ku-nlp/bert](https://github.com/ku-nlp/bert).
+\*2 The detail about localgovFAQ is on [localgovFAQ.md](localgovFAQ.md).
 
 ### BERT application for FAQ retrieval
 
