@@ -16,12 +16,12 @@ Download the BERT repository, BERT Japanese pre-trained model, QA pairs in Amaga
 The data structure is below.
 ```
 data
-├── bert : The forked repository from BERT original repository *1
+├── bert : the forked repository from BERT original repository *1
 ├── Japanese_L-12_H-768_A-12_E-30_BPE : BERT Japanese pre-trained model 
 └── localgovfaq *2
     ├── qas : QA pairs in Amagasaki City FAQ
     ├── testset_segmentation.txt : the testset for evaluation
-    └── samples : the retrieval results by TSUBAKI, BERT, and Joint model
+    └── samples : the retrieval results by TSUBAKI, BERT, and hybrid model
 
 ```
 **\*1 We modified the original code of BERT so that it can deal with Japanese sentences and load our FAQ retrieval format. See [ku-nlp/bert](https://github.com/ku-nlp/bert/tree/FAQretrieval) to check the differences from the original code.**
@@ -30,7 +30,7 @@ data
 
 ### BERT application for FAQ retrieval
 
-Finetune and evaluate.
+Generate dataset (train/test), finetuneing and evaluate.
 ```shell
 make -f Makefile.generate_dataset OUTPUT_DIR=/path/to/data_dir
 make -f Makefile.run_classifier BERT_DATA_DIR=/path/to/data_dir \
@@ -48,10 +48,10 @@ MAP : 0.550, MRR : 0.596, MDCG : 0.524
 
 ### TSUBAKI + BERT
 
-TSUBAKI ([`paper`]( http://nlp.ist.i.kyoto-u.ac.jp/local/pubdb/skeiji/IJCNLP2008/ijcnlp08.pdf ), [`github`]( https://github.com/ku-nlp/TSUBAKI ) ) is the open search engine based on BM25.
-We can get the higher score by using both TSUBAKI and BERT.
+TSUBAKI ([`paper`]( http://nlp.ist.i.kyoto-u.ac.jp/local/pubdb/skeiji/IJCNLP2008/ijcnlp08.pdf ), [`github`]( https://github.com/ku-nlp/TSUBAKI ) ) is an open search engine based on BM25.
+We can get a higher score by using both TSUBAKI and BERT.
 
-We can evaluate the joint model by the below command.
+We can evaluate the hybrid model by the following commands.
 ```shell
 python scripts/merge_tsubaki_bert_results.py --bert data/localgovfaq/samples/bert.txt \
     --tsubaki data/localgovfaq/samples/tsubaki.txt \
@@ -73,6 +73,6 @@ MAP : 0.660, MRR : 0.720, MDCG : 0.625
 ```
 
 ## Reference
-Wataru Sakata (LINE Corporation), Tomohide Shibata (Kyoto University), Ribeka Tanaka (Kyoto University) and Sadao Kurohashi (Kyoto University):
-FAQ Retrieval using Query-Question Similarity and BERT-Based Query-Answer Relevance,
+Wataru Sakata (LINE Corporation), Tomohide Shibata (Kyoto University), Ribeka Tanaka (Kyoto University) and Sadao Kurohashi (Kyoto University):  
+FAQ Retrieval using Query-Question Similarity and BERT-Based Query-Answer Relevance,  
 Proceedings of SIGIR2019: 42nd Intl ACM SIGIR Conference on Research and Development in Information Retrieval,  (2019.7).[`arxiv`](https://arxiv.org/abs/1905.02851)
