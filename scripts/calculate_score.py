@@ -14,15 +14,17 @@ def format_result(result, correct_As, target_qs, target_as, correct_ABCs):
     RR = 0
     DCG = 0
     Pn = [0] * (len(target_qs)+1)
+    afaq = 0
     counter = 0
     for i_result in result["result"]:
         if i_result["rank"] > 10000:
             break
-        str_result += "{}\t{}\t{}\n".format(
+        str_result += "{}\t{}\t{}\t{}\n".format(
                 ('#' if i_result["q_id"] in correct_As else '') +\
                         str(i_result["rank"]),
                 str(i_result["question"]),
-                "{:.3f}".format(i_result["score"])
+                "{:.3f}".format(i_result["score"]),
+                i_result["q_id"]
                 )
         if i_result["q_id"] in correct_As:
             if i_result["q_id"] in correct_ABCs[0]:
@@ -35,7 +37,7 @@ def format_result(result, correct_As, target_qs, target_as, correct_ABCs):
 
             counter += 1
             AP += float(counter) / float(i_result["rank"])
-            for i in range(len(target_as)):
+            for i in range(len(target_qs)):
                 prnk = i+1
                 if i_result["rank"] <= prnk:
                     Pn[prnk] += 1.0/prnk
@@ -51,13 +53,13 @@ def format_result(result, correct_As, target_qs, target_as, correct_ABCs):
     str_result += "result : {}, correct answer : {}\n".format(
             class_result,
             "\t".join([target_qs[int(A)] for A in correct_As]) if len(correct_As) != 0 else "None")
-    if len(correct_As) == 0:
+    if len(correct_ABCs[0]) + len(correct_ABCs[1]) + len(correct_ABCs[2]) == 0:
         return False
     return class_result, str_result, Pn, AP/counter if counter != 0 else 0, RR, DCG
 
 def main(args):
 
-    target_qs = [x.split("\t")[1] for x in open(args.target_qs).read().split("\n") if len(x.strip()) != 0]
+    target_qs = {int(re.match("tamba_auto_faq_(.*)$", x.split("\t")[0]).group(1)) : x.split("\t")[1] for x in open(args.target_qs).read().split("\n") if len(x.strip()) != 0}
     target_as = [x.split("\t")[1] for x in open(args.target_as).read().split("\n") if len(x.strip()) != 0]
     target_num = len(target_qs)
 
@@ -78,6 +80,8 @@ def main(args):
         else:
             deno_dd['Exist'] += 1
         deno_dd['all'] += 1
+
+    query_counter = deno_dd['all']
 
     result = None
     stat = {"FP" : 0, "TN" : 0, "FN" : 0, "TP" : 0}
@@ -115,11 +119,14 @@ def main(args):
                     MRR += RR
                     MDCG += DCG
                     print(str_result, end="")
+                    query_counter -=1
                     stat["{}".format(r if len(r) == 2 else "TP")] += 1
                     topmatch = re.match("top(\d*)", r)
                     if topmatch:
                         for i in range(target_num - int(topmatch.group(1)) + 1):
                             topn[target_num-i] += 1
+                    if query_counter == 0:
+                        break
             result = dict()
             continue
         q_match = re.match("Q : (.*)$", line.strip())
@@ -141,13 +148,14 @@ def main(args):
                     )
             continue
 
+    bunbo = deno_dd["Exist"]
     print("------------------------------")
-    print("Hit@1 : {}, 3: {}, 5 : {}, all : {}".format(topn[1], topn[3], topn[5], deno_dd["Exist"]))
-    print("SR@1 : {:.3f}, 3: {:.3f}, 5 : {:.3f}".format(float(topn[1])/deno_dd["Exist"], float(topn[3])/deno_dd["Exist"], float(topn[5])/deno_dd["Exist"]))
-    print("P@1 : {:.3f}, 3: {:.3f}, 5 : {:.3f}".format(float(MPn[1])/deno_dd["Exist"], float(MPn[3])/deno_dd["Exist"], float(MPn[5])/deno_dd["Exist"]))
-    print("MAP : {:.3f}".format(MAP/deno_dd["Exist"]), end=", ")
-    print("MRR : {:.3f}".format(MRR/deno_dd["Exist"]), end=", ")
-    print("MDCG : {:.3f}".format(MDCG/deno_dd["Exist"]))
+    print("Hit@1 : {}, 3: {}, 5 : {}, all : {}".format(topn[1], topn[3], topn[5], bunbo))
+    print("SR@1 : {:.3f}, 3: {:.3f}, 5 : {:.3f}".format(float(topn[1])/bunbo, float(topn[3])/bunbo, float(topn[5])/bunbo))
+    print("P@1 : {:.3f}, 3: {:.3f}, 5 : {:.3f}".format(float(MPn[1])/bunbo, float(MPn[3])/bunbo, float(MPn[5])/bunbo))
+    print("MAP : {:.3f}".format(MAP/bunbo), end=", ")
+    print("MRR : {:.3f}".format(MRR/bunbo), end=", ")
+    print("MDCG : {:.3f}".format(MDCG/bunbo))
 
 
 if __name__ == '__main__':

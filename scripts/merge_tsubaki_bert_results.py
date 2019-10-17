@@ -37,18 +37,21 @@ def main(args):
             if result == None:
                 pass
             elif len(result) >= 0:
+                result += [(titles[item], item, tsubaki_list[ith_q]["result"][item]) for item in tsubaki_list[ith_q]["result"] if item not in tids]
                 print(
 
                     "\n".join(
                         [
                             "{}".format(i+1) + "\t" + x[0] + "\t" + x[1] + "\t" + "{:.3f}".format(x[2]) 
                             for i, x in enumerate(sorted(result, key = lambda x : x[2])[::-1][:])
-                            ]
+                            ][:10]
                             )
                     )
             result = []
             tids = set()
             ith_q += 1
+            if ith_q == 1000:
+                break
             print(line.strip())
             counter = 0
             continue
@@ -60,8 +63,7 @@ def main(args):
         rank, tq, tid, score = line.strip().split("\t")
         tq = tq.strip()
         score = float(score)
-        if counter >= 10:
-            result.append((tq, tid, score))
+        if counter >= 5:
             continue
         if tid in tsubaki_list[ith_q]["result"]:
             result.append((tq, tid, score + args.tsubaki_ratio * tsubaki_list[ith_q]["result"][tid]))
@@ -70,6 +72,8 @@ def main(args):
             result.append((tq, tid, score))
             tids.add(tid)
         counter += 1
+    print("------------------------------")
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
