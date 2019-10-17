@@ -1,4 +1,5 @@
 import argparse
+import json
 from math import log2
 import sys
 import re
@@ -67,10 +68,9 @@ def main(args):
     deno_dd = defaultdict(int)
 
     for line in open(args.testset):
-        q, As, Bs, Cs = line.strip().split("\t")
-        As = As.split(" ") if As != "None" else []
-        Bs = Bs.split(" ") if Bs != "None" else []
-        Cs = Cs.split(" ") if Cs != "None" else []
+        one_test = json.loads(line)
+        q, As, Bs, Cs = one_test["question"], list(map(str, one_test["answerA"])),\
+                list(map(str, one_test["answerB"])), list(map(str, one_test["answerC"]))
         q2correct_As[q] = As + Bs + Cs
         q2correct_ABCs[q] = (As, Bs, Cs)
         if len(As + Bs + Cs) == 0:

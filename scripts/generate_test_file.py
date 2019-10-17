@@ -1,4 +1,5 @@
 import sys
+import json
 import argparse
 
 def read_qaid_file(qa_id_file):
@@ -44,9 +45,9 @@ def main(args):
     with open(args.test_set_file, mode='r', encoding='utf-8') as file:
         for line in file:
             if args.new_format is True:
-                question, answer_A, answer_B, answer_C = line.strip().split("\t")
+                test_dict = json.loads(line)
                 for answer in answers:
-                    print("0\t{}\t{}".format(question, answer))
+                    print("0\t{}\t{}".format(test_dict["question"], answer))
             else:
                 category, question, gold_answer_id_string = line.strip().split("\t", 2)
                 gold_answer_ids = gold_answer_id_string.split("\t")
