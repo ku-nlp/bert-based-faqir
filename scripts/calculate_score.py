@@ -56,6 +56,17 @@ def format_result(result, correct_As, target_qs, target_as, correct_ABCs):
         return False
     return class_result, str_result, Pn, AP/counter if counter != 0 else 0, RR, DCG
 
+def check(result, correct_As, correct_Bs, correct_Cs):
+    for i_result in result["result"]:
+        if i_result["q_id"] in correct_As:
+            i_result["label"] = "A"
+        elif i_result["q_id"] in correct_Bs:
+            i_result["label"] = "B"
+        elif i_result["q_id"] in correct_Cs:
+            i_result["label"] = "C"
+        else:
+            i_result["label"] = "D"
+
 def main(args):
 
     target_qs = [x.split("\t")[1] for x in open(args.target_qs).read().split("\n") if len(x.strip()) != 0]
@@ -107,6 +118,12 @@ def main(args):
                         target_as,
                         q2correct_ABCs[t_question]
                         )
+                check(
+                        result,
+                        q2correct_ABCs[t_question][0],
+                        q2correct_ABCs[t_question][1],
+                        q2correct_ABCs[t_question][2],
+                        )
                 if result_rq:
                     r, str_result, Pn, AP, RR, DCG = result_rq
                     for i in range(target_num):
@@ -114,7 +131,10 @@ def main(args):
                     MAP += AP
                     MRR += RR
                     MDCG += DCG
-                    print(str_result, end="")
+                    if args.json:
+                        print(json.dumps(result, ensure_ascii=False))
+                    else:
+                        print(str_result, end="")
                     stat["{}".format(r if len(r) == 2 else "TP")] += 1
                     topmatch = re.match("top(\d*)", r)
                     if topmatch:
@@ -141,13 +161,14 @@ def main(args):
                     )
             continue
 
-    print("------------------------------")
-    print("Hit@1 : {}, 3: {}, 5 : {}, all : {}".format(topn[1], topn[3], topn[5], deno_dd["Exist"]))
-    print("SR@1 : {:.3f}, 3: {:.3f}, 5 : {:.3f}".format(float(topn[1])/deno_dd["Exist"], float(topn[3])/deno_dd["Exist"], float(topn[5])/deno_dd["Exist"]))
-    print("P@1 : {:.3f}, 3: {:.3f}, 5 : {:.3f}".format(float(MPn[1])/deno_dd["Exist"], float(MPn[3])/deno_dd["Exist"], float(MPn[5])/deno_dd["Exist"]))
-    print("MAP : {:.3f}".format(MAP/deno_dd["Exist"]), end=", ")
-    print("MRR : {:.3f}".format(MRR/deno_dd["Exist"]), end=", ")
-    print("MDCG : {:.3f}".format(MDCG/deno_dd["Exist"]))
+    if args.verbose:
+        print("------------------------------")
+        print("Hit@1 : {}, 3: {}, 5 : {}, all : {}".format(topn[1], topn[3], topn[5], deno_dd["Exist"]))
+        print("SR@1 : {:.3f}, 3: {:.3f}, 5 : {:.3f}".format(float(topn[1])/deno_dd["Exist"], float(topn[3])/deno_dd["Exist"], float(topn[5])/deno_dd["Exist"]))
+        print("P@1 : {:.3f}, 3: {:.3f}, 5 : {:.3f}".format(float(MPn[1])/deno_dd["Exist"], float(MPn[3])/deno_dd["Exist"], float(MPn[5])/deno_dd["Exist"]))
+        print("MAP : {:.3f}".format(MAP/deno_dd["Exist"]), end=", ")
+        print("MRR : {:.3f}".format(MRR/deno_dd["Exist"]), end=", ")
+        print("MDCG : {:.3f}".format(MDCG/deno_dd["Exist"]))
 
 
 if __name__ == '__main__':
@@ -167,6 +188,14 @@ if __name__ == '__main__':
     parser.add_argument(
             "--target_as",
             action = 'store'
+            )
+    parser.add_argument(
+            "--json",
+            action = 'store_true'
+            )
+    parser.add_argument(
+            "--verbose",
+            action = 'store_true'
             )
     args = parser.parse_args()
     main(args)
